@@ -7,7 +7,9 @@ const octokit = github.getOctokit(core.getInput("token"));
 (async function(){
   try {
     const commits = github.context.payload.commits;
+    console.log(commits);
     const commit = await octokit.request({ method: "GET", url: `https://api.github.com/repos/mudlabs/web-widgets/commits/${commits[0].id}`});
+    console.log(commit.data);
     const item = commit.data.files[0];
     const file = await octokit.request({ method: "GET", url: item.raw_url });
     const context = cheerio.load(file.data);
