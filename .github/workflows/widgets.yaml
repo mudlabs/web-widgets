@@ -2,8 +2,8 @@ name: Widgets
 
 on:
   push:
-    branches:
-      - master
+#     branches:
+#       - master
     paths:
       - 'widgets/*.html'
 
@@ -14,14 +14,18 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
-#       - name: Diffy
-#         uses: mudlabs/diffy@v1.0.0
-#         id: diffy
-      - name: Add Widget to Site
+      - name: Simple Diff
+        uses: mudlabs/simple-diff@v1.2.0
+        id: diff
+      - name: Modify Widgets
         uses: ./.github/action
-#       - name: Update Readme
-#         uses: ./.github/action
-# #         if: steps.diffy.outputs.modified !== true
-#       - name: Add and Commit
-#         uses: EndBug/add-and-commit@v5.1.0
-#         if: success()
+        with:
+          deleted: ${{steps.diff.outputs.removed}}
+          added: ${{steps.diff.outputs.added}}
+          modified: ${{steps.diff.outputs.modified}}
+          renamed: ${{steps.diff.outputs.renamed}}
+          name: ${{steps.diff.outputs.name}}
+          previous: ${{steps.diff.outputs.previous}}
+      - name: Add and Commit
+        uses: EndBug/add-and-commit@v5.1.0
+        if: success()

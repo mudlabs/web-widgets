@@ -1,5 +1,5 @@
 clean: true
 init: false
 path: ./.github/action/
-issue: 1
+issue: 2
 install: []

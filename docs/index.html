@@ -1,221 +1,103 @@
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Widget</title>
+    <title>Web Widgets</title>
 </head>
+
 <body>
     <main>
-        <section class="text">
-            <h1 id="user-text" class="text-field" contenteditable="true"></h1>
+        <section class="intro">
+            <h1 class="title">Web Widgets</h1>
+            <p class="summary">A collection of open source widgets built with <mark>html</mark>, <mark>css</mark> and <mark>js</mark>. If you would like to contribute a widget please head over to GitHub and view the <a href="https://github.com/mudlabs/web-widgets/README.md">README.md</a> instructions.</p>
         </section>
-        <section id="size" class="controle size">
-            <h2 class="controle-title">Size</h2>
-            <button class="size-btn" id="decrement" onclick="textSize(this)">D</button>
-            <button class="size-btn" id="increment" onclick="textSize(this)">I</button>
-        </section>
-        <section id="alignment" class="controle alignment">
-            <h2 class="controle-title">Align</h2>
-            <button id="left" onclick="textAlign(this)">L</button>
-            <button id="center" class="active" onclick="textAlign(this)">C</button>
-            <button id="right" onclick="textAlign(this)">R</button>
-        </section>
-        <section id="style" class="controle style">
-            <h2 class="controle-title">Style</h2>
-            <button class="style" id="bold" onclick="textStyle(this)">B</button>
-            <button class="style" id="italic" onclick="textStyle(this)">I</button>
-            <button class="style" id="underline" onclick="textStyle(this)">U</button>
-        </section>
-        <section id="font" class="controle font">
-            <h2 class="controle-title">Font</h2>
-            <input type="text" name="font" id="user-font" class="font--request" placeholder="Enter font name">
+        <section class="contents">
+            <ul class="widgets">
+</ul>
         </section>
     </main>
-</body>
-</html>
+
 
 <style>
+    body {
+        font-family: 'PT Sans', Arial, Helvetica, sans-serif;
+        color: darkslategray;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
     main {
         display: grid;
-        height: calc(100vh - 2em);
-        margin: 1em 1em;
-        grid-template-rows: min-content 1fr min-content;
-        grid-template-columns: repeat(1fr, 6);
-    }
-    main,
-    button,
-    input {
-        font-family: 'PT Sans', Arial, Helvetica, sans-serif;
+        grid-template-rows: min-content auto;
+        grid-template-columns: 1fr minmax(25ch, 91ch) 1fr;
     }
 
-    .controle {
-        grid-row: 3;
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: start;
-        padding: 1em;
+    mark {
+        background-color: lavender;
+        text-transform: uppercase;
+        font-style: italic;
+        color: lightslategrey;
+        padding: 1px 6px 0;
     }
-    .controle-title {
-        width: 100%;
+
+    a {
+        font-weight: bold;
+        color: lightslategrey;
     }
-    .controle button,
-    .controle input {
-        margin: 0.5rem 0.5rem;
-        width: 32px;
-        height: 30px;
-        border: none;
-        background-color: hsl(0deg 0% 97%);
-    }
-    .controle button.active {
-        background-color: hsl(0deg 3% 88%);
-    }
-    .controle input {
-        width: 100%;
-        padding: 0.2rem;
-    }
-    .text {
+
+    .intro {
         grid-row: 1;
-        grid-column: span 6;
-        border: 2px dashed hsl(0deg 3% 88%);
-        margin: 2em;
-        padding: 1em;
-    }
-
-    .text-field {
-        font-size: 3rem;
+        grid-column: 2;
         text-align: center;
-        font-weight: normal;
-        position: relative;
-        outline: none;
-    }
-    .text-field::after {
-        content: "Text Here";
-        transition: opacity 0.3s ease-in-out;
-        position: absolute;
-        color: rgba(2, 2, 2, 0.144);
-        font-size: 1em;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-    }
-    .text-field.hidden::after {
-        opacity: 0;
+        margin: 5rem 1rem;
     }
 
-    .size {
+    .title {
+        font-size: 5rem;
+    }
+
+    .summary {
+        font-size: 1.2rem;
+        padding: 0 1rem;
+    }
+
+    .contents {
+        grid-row: 2;
         grid-column: 2;
     }
-    .alignment {
-        grid-column: 3;
-    }
-    .style {
-        grid-column: 4;
-    }
-    .font {
-        grid-column: 5;
-        justify-content: start;
+
+    .widget {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        border-left: 5px solid lavender;
+        padding: 0 0 0 1em;
+        margin-bottom: 3rem;
     }
 
-    .size-btn.active {
-        -webkit-animation: FLASH 0.4s ; /* Safari 4+ */
-        -moz-animation:    FLASH 0.4s ; /* Fx 5+ */
-        -o-animation:      FLASH 0.4s ; /* Opera 12+ */
-        animation:         FLASH 0.4s ;
+    .widget-metadata {
+        color: lightslategrey;
     }
-    @-webkit-keyframes FLASH {
-        0%   { background-color: hsl(0deg 0% 97%); }
-        50% { background-color: hsl(0deg 3% 88%);}
-        100% { background-color: hsl(0deg 0% 97%); }
+
+    .widget-link {
+        font-size: 1.6rem;
+        margin-bottom: 0.7rem;
+        color: tomato;
     }
-    @-moz-keyframes FLASH {
-        0%   { background-color: hsl(0deg 0% 97%); }
-        50% { background-color: hsl(0deg 3% 88%);}
-        100% { background-color: hsl(0deg 0% 97%); }
+
+    .widget-link:visited {
+        color: salmon;
     }
-    @-o-keyframes FLASH {
-        0%   { background-color: hsl(0deg 0% 97%); }
-        50% { background-color: hsl(0deg 3% 88%);}
-        100% { background-color: hsl(0deg 0% 97%); }
-    }
-    @keyframes FLASH {
-        0%   { background-color: hsl(0deg 0% 97%); }
-        50% { background-color: hsl(0deg 3% 88%);}
-        100% { background-color: hsl(0deg 0% 97%); }
-    }
+
+    .widget-summary {
+        margin: 0;
+        font-size: 1.1rem;
+    } 
 </style>
 
-<script>
-    const user_text = document.getElementById("user-text");
-    const user_font = document.getElementById("user-font");
-    const left = document.getElementById("left");
 
 
-    const numberfy = pixelstring => parseFloat(pixelstring.replace(/\D$/, ""));
-
-    const hidePlaceholder = () => user_text.classList.add("hidden");
-    const showPlaceholder = () => user_text.innerText.trim() !== "" ? null : user_text.classList.remove("hidden");
 
 
-    function textSize(btn) {
-        const computed = window.getComputedStyle(user_text).fontSize;
-        const current = numberfy(computed);
-        const size = btn.id === "increment" 
-            ? Math.min(200, current + 20)
-            : Math.max(18, current - 20);
-
-        if(btn.classList.contains("active")) btn.classList.remove("active");
-        btn.classList.add("active");
-        setTimeout(() => btn.classList.remove("active"), 100)
-        return user_text.style.fontSize = size;
-    }
-
-
-    function textAlign(btn) {
-        const activeAlignment = btn.parentElement.querySelector(".active");
-        if (activeAlignment) activeAlignment.classList.remove("active");
-        user_text.style.textAlign = btn.id;
-        btn.classList.add("active");
-
-    }
-
-    function textStyle(btn) {
-        let property;
-        switch (btn.id) {
-            case "italic":
-                property = "fontStyle";
-                break;
-            case "bold":
-                property = "fontWeight";
-                break;
-            case "underline":
-                property = "textDecoration";
-                break;
-        }
-        user_text.style[property] = user_text.style[property] === btn.id ? null : btn.id;
-        return btn.classList.toggle("active");
-    }
-
-    function applyFont() {
-        const font = user_font.value;
-        const computed = window.getComputedStyle(user_text).fontSize;
-
-        try {
-            const hasFont = document.fonts.check(`${computed} ${font}`);
-            return hasFont
-                ? user_text.style.fontFamily = font
-                : alert(`Could not find font (${font})\n\nEnter the name of any font you have installed on your system.`);
-        } catch (error) {
-            return console.log(error);
-        }
-    }
-
-
-    user_font.addEventListener("keyup", event => event.which == 13 ? applyFont() : null);
-    user_font.addEventListener("focus", () => user_font.select());
-    user_text.addEventListener("focus", hidePlaceholder);
-    user_text.addEventListener("blur", showPlaceholder);
-
-</script>
+</body></html>

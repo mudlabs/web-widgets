@@ -3,3 +3,20 @@ description: Publishes a new widget page to the live site, and updates the home 
 runs:
   using: node12
   main: action.js
+inputs:
+  token:
+    description: PAT for authorisation
+    required: false
+    default: ${{ github.token }}
+  deleted:
+    description: File status output from Simple Diff action.
+  added:
+    description: File status output from Simple Diff action.
+  modified:
+    description: File status output from Simple Diff action.
+  renamed:
+    description: File status output from Simple Diff action.
+  name:
+    description: File status output from Simple Diff action.
+  previous:
+    description: File status output from Simple Diff action.
