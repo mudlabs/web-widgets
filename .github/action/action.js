@@ -21,7 +21,7 @@ const toBoolean = (boolean_string) => boolean_string.toLowerCase() === "false" ?
 
 // Finds the original author of a file created on the repo.
 async function originalAuthor(path) {
-  const commits = await octokit.request("GET /repos/{owner}/{repo}/commits", { owner, repo, path, sha: "dev"});
+  const commits = await octokit.request("GET /repos/{owner}/{repo}/commits", { owner, repo, path});
   const original = commits.data.pop();
   const author = original.author.login;
   const avatar = original.author.avatar_url;
