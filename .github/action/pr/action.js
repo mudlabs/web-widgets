@@ -6,7 +6,7 @@ const octokit = github.getOctokit(core.getInput("token"));
 
 (async function(){
   try {
-    const commits = github.context.payload.commits;
+    const commits = github.context.payload.pull_request.commits;
     console.log(github.context.payload);
     const commit = await octokit.request({ method: "GET", url: `https://api.github.com/repos/mudlabs/web-widgets/commits/${commits[0].id}`});
     console.log(commit.data);
