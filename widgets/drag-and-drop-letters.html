@@ -1,0 +1,535 @@
+<body data-widget-name="Drag and Drop Letters" data-widget-summary="Drag and drop letters onto the grid to make you sign.">
+    <main>
+        <section id="settings" class="settings">
+            <div id="selected" class="setting">
+                <label for="selected" class="selected">
+                    <h2 class="title">selected</h2>
+                    <span id="current-selection" class="selected-value">...</span>
+                    <button id="remove" disabled onclick="removeSelected(this)">DELETE</button>
+                </label>
+            </div>
+            <div id="font-color" class="setting">
+                <label for="color" class="picker">
+                    <h2 class="title">color</h2>
+                    <span id="current-color" class="picker-value">...</span>
+                    <input type="color" disabled id="colorpicker" value="#000000" style="width:130px" oninput="changeSelectionColor(this)">
+                </label>
+            </div>
+            <div id="font-size" class="setting">
+                <label for="size" class="range">
+                    <h2 class="title">size</h2>
+                    <span id="current-size" class="range-value">...</span>
+                    <input type="range" disabled id="size" value="16" min="16" max="600" oninput="changeSize(this)">
+                </label>
+            </div>
+            <div id="font-weight" class="setting">
+                <label for="weight" class="range">
+                    <h2 class="title">weight</h2>
+                    <span id="current-weight" class="range-value">...</span>
+                    <input type="range" disabled id="weight" value="100" step="100" min="100" max="900" oninput="changeWeight(this)">
+                </label>
+            </div>
+            <div id="transform" class="setting">
+                <label for="rotate" class="range">
+                    <h2 class="title">rotate</h2>
+                    <span id="current-rotation" class="range-value">...</span>
+                    <input type="range" disabled id="rotate" name="rotate" min="0" max="360" value="0" step="1" list="step-detents" oninput="rotateSelection(this)">
+                </label>
+            </div>
+            <div id="zindex" class="setting">
+                <label for="z-index" class="range">
+                    <h2 class="title">z-index</h2>
+                    <span id="current-index" class="index-value">...</span>
+                    <div class="btn-box">
+                        <button id="decrement" disabled data-down onclick="adjustZIndex(this)">&#8722;</button>
+                        <button id="increment" disabled data-up onclick="adjustZIndex(this)">&#43;</button>
+                    </div>
+                </label>
+            </div>
+        </section>
+        
+        <section 
+            id="display" 
+            class="display-area" 
+            ondragover="allowDrop(event)" 
+            ondrop="drop(event)">
+            <!-- <div class="display-item">
+                <span class="display-item-letter"></span>
+            </div> -->
+        </section>
+       
+        <section id="keys" class="keys" ondragstart="drag(event)">
+           <div class="letters">
+                <span class="letter" draggable="true">a</span>
+                <span class="letter" draggable="true">b</span>
+                <span class="letter" draggable="true">c</span>
+                <span class="letter" draggable="true">d</span>
+                <span class="letter" draggable="true">e</span>
+                <span class="letter" draggable="true">f</span>
+                <span class="letter" draggable="true">g</span>
+                <span class="letter" draggable="true">h</span>
+                <span class="letter" draggable="true">i</span>
+                <span class="letter" draggable="true">j</span>
+                <span class="letter" draggable="true">k</span>
+                <span class="letter" draggable="true">l</span>
+                <span class="letter" draggable="true">m</span>
+                <span class="letter" draggable="true">n</span>
+                <span class="letter" draggable="true">o</span>
+                <span class="letter" draggable="true">p</span>
+                <span class="letter" draggable="true">q</span>
+                <span class="letter" draggable="true">r</span>
+                <span class="letter" draggable="true">s</span>
+                <span class="letter" draggable="true">t</span>
+                <span class="letter" draggable="true">u</span>
+                <span class="letter" draggable="true">v</span>
+                <span class="letter" draggable="true">w</span>
+                <span class="letter" draggable="true">x</span>
+                <span class="letter" draggable="true">y</span>
+                <span class="letter" draggable="true">z</span>
+            </div>
+        </section>
+    </main>
+</body>
+
+<style>
+    :root {
+        box-sizing: border-box;
+        font-size: 16px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+        margin: 0;
+    }
+
+    main  {
+        width: 100vw;
+        height: 100vh;
+        display: grid;
+        grid-template-rows: min-content 1fr min-content;
+    }
+
+    button,
+    input[type=color],
+    input[type=range], 
+    .display-area--item {
+        cursor: pointer;
+    }
+
+    .settings {
+        background-color: hsl(0deg 0% 95%);
+        padding: 1rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+
+    .setting {
+        margin: 1.2rem;
+    }
+
+    .title {
+        color: hsl(0deg 0% 15%);
+        font-weight: 900;
+        text-transform: capitalize;
+        margin: 1rem 1rem 0.6rem;
+    }
+
+    .selected,
+    .picker,
+    .range {
+        display: flex;
+        flex-direction: column;
+    }
+    .selected-value,
+    .picker-value,
+    .range-value,
+    .index-value {
+        align-self: center;
+        margin-bottom: 0.2rem;
+        color: #424242;
+    }
+    .selected-value,
+    .range-value,
+    .index-value {
+        margin-bottom: 0.4rem;
+    }
+
+    .btn-box {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .picker input {
+        width: 130px;
+        border: none;
+    }
+
+    .display-area {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        background-color: hsl(0deg 0% 98%);
+    }
+    .display-area--item {
+        position: absolute;
+        transform-origin: center;
+        transform: rotate(0deg);
+    }
+
+    .display-item,
+    .display-item-letter {
+        position: absolute;
+        transform-origin: center;
+    }
+
+    .display-item-letter {
+        transform: rotate(0deg);
+    }
+
+    .keys {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        background-color: hsl(0deg 0% 95%);
+        padding: 1rem;
+    }
+
+    .letters {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .letter {
+        cursor: move;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 100;
+        width: calc(100vw/27);
+        height: calc(100vw/27);
+        background: transparent;
+        min-width: 42px;
+        min-height: 42px;
+        margin: 0.1em;
+        padding: 0.2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: hsl(0deg 0% 7%);
+        border: 2px solid hsl(0deg 0% 88%);
+    }
+
+</style>
+
+<script>
+    // Each letter in #letters can be dragged and dropped into #board.
+    // Dragging a letter into #board should not remove that the .letter from #letters
+    // .letters in #board can be indevidually moved around, and otherwise manipulated.
+    // .letters in #board can be dragged outside #board to be deleted.
+    // if a .letter in #letters is dropped outside of #board it (the clone) should be deleted.
+    let _selected = null;
+    let display_rect = null
+    let dragged_element_rect = null;
+    let _dragging = false;
+    const settings = document.getElementById("settings");
+    const display = document.getElementById("display");
+    const div1 = document.getElementById("div1")
+
+
+    const getSelected = () => _selected;
+    const clearSelected = () => _selected = null;
+    const hasSelected = () => _selected !== null;
+    const setSelected = (element) => {
+        let axis;
+        if (element.style.transform) {
+            axis = element.style.transform
+                .match(/^translate\(([\d\.]+)px\,\s*([\d\.]+)px\)$/)
+                .filter(result => parseFloat(result));
+        }
+        
+        // specify settings from element;
+        _selected = {
+            element: element,
+            child: element.firstElementChild,
+            translate: {
+                x: element.style.transform ? axis[0] : 0,
+                y: element.style.transform ? axis[1] : 0
+            }
+        }
+        setSettingsFromSelected(_selected)
+    }
+
+    const rotationFromMatrix = matrix => {
+        const start = matrix.indexOf("(") + 1;
+        const end = matrix.indexOf(")");
+        const [ cos, sin ] = matrix
+            .substring(start, end)
+            .split(",")
+            .map(value => Number.parseFloat(value));
+        const scale = Math.sqrt(cos*cos + sin*sin);
+        let radians = Math.atan2(sin, cos);
+        if (radians < 0) radians += (2 * Math.PI);
+        return Math.round(radians * (180/Math.PI));
+    }
+
+    const hexFromRGBString = rgb => {
+        return `#${rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/)
+                  .slice(1)
+                  .map(i => parseInt(i, 10).toString(16).padStart(2, "0"))
+                  .join("")}`;
+    }
+
+    function setSettingsFromSelected(selected) {
+        const styles = window.getComputedStyle(selected.child);
+        const angle = rotationFromMatrix(styles.transform);
+        const color = hexFromRGBString(styles.color);
+        const selection = settings.querySelector("#current-selection");
+        const picker = settings.querySelector("#colorpicker");
+        const size = settings.querySelector("#size");
+        const weight = settings.querySelector("#weight");
+        const rotation = settings.querySelector("#rotate");
+        const zindex = settings.querySelector("#current-index");
+
+        
+        selection.innerText = selected.child.innerText;
+        picker.value = color;
+        picker.previousElementSibling.innerText = color;
+        size.value = styles.fontSize.replace(/px$/, "");
+        size.previousElementSibling.innerText = size.value;
+        weight.value = styles.fontWeight;
+        weight.previousElementSibling.innerText = styles.fontWeight;
+        rotation.value = angle;
+        rotation.previousElementSibling.innerHTML = angle + "&deg;";
+        zindex.innerText = selected.element.style.zIndex;
+
+        setEnabled([
+            selection.nextElementSibling,
+            picker,
+            size,
+            weight,
+            rotation,
+            zindex.nextElementSibling.firstElementChild,
+            zindex.nextElementSibling.lastElementChild
+        ]);
+    }
+
+    function clearSettings() {
+        const selection = settings.querySelector("#current-selection");
+        const picker = settings.querySelector("#colorpicker");
+        const size = settings.querySelector("#size");
+        const weight = settings.querySelector("#weight");
+        const rotation = settings.querySelector("#rotate");
+        const zindex = settings.querySelector("#current-index");
+        const none = "...";
+
+        selection.innerText = none;
+        picker.value = "#000000";
+        picker.previousElementSibling.innerText = none;
+        size.value = 16;
+        size.previousElementSibling.innerText = none;
+        weight.value = 100;
+        weight.previousElementSibling.innerText = none;
+        rotation.value = 0;
+        rotation.previousElementSibling.innerHTML = none;
+        zindex.innerText = none;
+
+        setDisabled([
+            selection.nextElementSibling,
+            picker,
+            size,
+            weight,
+            rotation,
+            zindex.nextElementSibling.firstElementChild,
+            zindex.nextElementSibling.lastElementChild
+        ]);
+
+    }
+
+    function setDisabled(array) {
+        array.forEach(item => item.setAttribute("disabled", true));
+    }
+
+    function setEnabled(array) {
+        array.forEach(item => item.removeAttribute("disabled"));
+    }
+    
+
+
+    function allowDrop(ev) {
+    ev.preventDefault();
+    }
+
+    function drag(ev) {
+        console.log("drag", ev)
+        ev.dataTransfer.setData("size", ev.target.clientHeight);
+        ev.dataTransfer.setData("text", ev.target.innerText);
+    }
+
+    // get x,y coordinates of pointer relative to drop space
+    function drop(event) {
+        event.preventDefault();
+        let element_rect;
+        const display_rect = display.getBoundingClientRect();
+        const event_x = event.clientX - display_rect.left;
+        const event_y = event.clientY - display_rect.top;
+        const element = makeInteractiveBoardElement({
+            text: event.dataTransfer.getData("text"),
+            font: { size: event.dataTransfer.getData("size") }
+        });
+        event.target.appendChild(element);
+        element_rect = element.firstElementChild.getBoundingClientRect();
+        setSelected(element);
+        setTranslate({
+            x: event.clientX - (display_rect.left + (element_rect.width / 2)),
+            y: event.clientY - (display_rect.top + (element_rect.height / 2))
+        });
+    }
+
+    // Change this so it creates an outer div and an inner span.
+    // the outer div.display-item will be translated
+    // the inner span.display-item-leter will be rotated etc...
+    function makeInteractiveBoardElement({ text, font }) {
+        const id = Date.now();
+        const outer = document.createElement("div");
+        const inner = document.createElement("span");
+
+        outer.id = Date.now();
+        outer.className = "display-item";
+        outer.style.zIndex = display.children.length;
+        console.log(outer.style.zIndex)
+        
+        inner.style.fontSize = `${font.size}px`;
+        inner.className = "display-item-letter";
+        inner.dataset.displayed = true;
+        inner.innerText = text;
+
+        inner.addEventListener("click", setDisplayedSelected)
+        outer.append(inner);
+
+        return outer;
+    }
+
+    function changeSelectionColor(input) {
+        if (hasSelected()) {
+            getSelected().element.style.color = input.value;
+        }
+    }
+
+    function rotateSelection(input) {
+        input.previousElementSibling.innerHTML = input.value + "&deg;";
+        const selected = getSelected().child;
+        selected.style.transform = `rotate(${input.value}deg)`;
+    }
+
+    function adjustZIndex(button) {
+        const down = button.dataset.down !== undefined;
+        const length = display.children.length;
+        const element = getSelected().element;
+        const index = down 
+            ? parseFloat(element.style.zIndex) - 1 
+            : parseFloat(element.style.zIndex) + 1;
+        element.style.zIndex = index < 0 ? 0 : index;
+        button.parentElement.previousElementSibling.innerText = element.style.zIndex;
+    }
+
+    function changeWeight(input) {
+        input.previousElementSibling.innerText = input.value;
+        const selected = getSelected().child;
+        selected.style.fontWeight = input.value;
+    }
+
+    function changeSize(input) {
+        const selected = getSelected();
+        input.previousElementSibling.innerText = input.value;
+        selected.child.style.fontSize = input.value;
+        
+    }
+
+    function removeSelected() {
+        try {
+            const index = parseInt(getSelected().element.style.zIndex);
+            getSelected().element.remove();
+            if (display.children.length > 0) {
+                const item = [...display.children].reduce((prev, curr) => {
+                    const cIndex = parseInt(curr.style.zIndex);
+                    const pIndex = parseInt(prev.style.zIndex);
+                    return Math.abs(cIndex - index) < Math.abs(pIndex - index) 
+                        ? curr 
+                        : prev
+                });
+                setSelected(item);
+            } else {
+                clearSelected();
+                clearSettings();
+            }
+        } catch (error) {
+            console.log("Remove Selection:", error)
+        }
+    }
+
+    function setDisplayedSelected(event) {
+        event.preventDefault();
+        setSelected(event.target.parentElement);
+        return;
+    }
+
+
+
+    // DRAG DISPLAY ITEM
+    display.addEventListener("touchstart", displayDragStart, false);
+    display.addEventListener("touchmove", displayDrag, false);
+    display.addEventListener("touchend", displayDragEnd, false);
+    display.addEventListener("mousedown", displayDragStart, false);
+    display.addEventListener("mousemove", displayDrag, false);
+    display.addEventListener("mouseup", displayDragEnd, false);
+    
+    
+
+    function displayDragStart(event) {
+        if (event.target.tagName === "SPAN") {
+            const target = event.target.parentElement;
+
+            if (!hasSelected() || getSelected().element.id !== target.id) {
+                setSelected(target);
+            }
+
+            display_rect = display.getBoundingClientRect();
+            dragged_element_rect = getSelected().child.getBoundingClientRect();
+
+            _dragging = true;
+        }
+
+    }
+
+    function displayDragEnd(event) {
+        _dragging = false;
+    }
+
+    function displayDrag(event) {
+        event.preventDefault();
+
+        if (!_dragging) return;
+
+        const touching = event.type === "touchmove";
+        const clientX = touching ? event.touches[0].clientX : event.clientX;
+        const clientY = touching ? event.touches[0].clientY : event.clientY;
+
+        setTranslate({ 
+            x: clientX - (display_rect.left + (dragged_element_rect.width / 2)),
+            y: clientY - (display_rect.top + (dragged_element_rect.height / 2))
+        });
+    }
+
+    function setTranslate({x, y}) {
+        const selected = getSelected();
+        selected.element.style.transform = `translate(${x}px, ${y}px)`;
+        selected.translate.x = x;
+        selected.translate.y = y;
+
+    }
+
+</script>
