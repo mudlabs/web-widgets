@@ -229,11 +229,6 @@
 </style>
 
 <script>
-    // Each letter in #letters can be dragged and dropped into #board.
-    // Dragging a letter into #board should not remove that the .letter from #letters
-    // .letters in #board can be indevidually moved around, and otherwise manipulated.
-    // .letters in #board can be dragged outside #board to be deleted.
-    // if a .letter in #letters is dropped outside of #board it (the clone) should be deleted.
     let _selected = null;
     let display_rect = null
     let dragged_element_rect = null;
@@ -392,9 +387,7 @@
         });
     }
 
-    // Change this so it creates an outer div and an inner span.
-    // the outer div.display-item will be translated
-    // the inner span.display-item-leter will be rotated etc...
+   
     function makeInteractiveBoardElement({ text, font }) {
         const id = Date.now();
         const outer = document.createElement("div");
@@ -403,7 +396,6 @@
         outer.id = Date.now();
         outer.className = "display-item";
         outer.style.zIndex = display.children.length;
-        console.log(outer.style.zIndex)
         
         inner.style.fontSize = `${font.size}px`;
         inner.className = "display-item-letter";
@@ -419,6 +411,7 @@
     function changeSelectionColor(input) {
         if (hasSelected()) {
             getSelected().element.style.color = input.value;
+            input.previousElementSibling.innerHTML = input.value;
         }
     }
 
