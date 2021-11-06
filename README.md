@@ -1,7 +1,7 @@
-<html><head></head><body># web-widgets
-Web widgets can be used to demonstrate programming to new and experienced developers or as a library of small components, which can be readily added to any website/app and customised for purpose. Everyone is welcome to contribute a widget.
+[:link: &nbsp; https://mudlabs.github.io/web-widgets](https://mudlabs.github.io/web-widgets)
 
-- [:link: &nbsp; Web Widgets](https://mudlabs.github.io/web-widgets)
+# web-widgets
+Web widgets can be used to demonstrate programming to new and experienced developers or as a library of small components, which can be readily added to any website/app and customised for purpose. Everyone is welcome to contribute a widget.
 
 
 ## Contribute
@@ -27,4 +27,3 @@ Create your widget `html` file and add it to the `widgets` directory. Please ref
 </tr>
   </tbody>
 </table>
-</body></html>
