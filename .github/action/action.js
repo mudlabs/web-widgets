@@ -97,7 +97,7 @@ async function removeContributor(instance, author) {
     const readme = await readFile("./README.md");
     const instance = cheerify(readme);
     instance(`td[id=${author}]`).remove();
-    const result = await writeFile("./README.md", instance.html());
+    const result = await writeFile("./README.md", instance.xml());
     return result;
   }
   return;
@@ -115,7 +115,7 @@ async function addContributor(template, engine, data) {
     last_tr.children("td").length > 6
       ? contributors.append(`<tr>${td}</tr>`)
       : last_tr.append(td);
-    const result = await writeFile("./README.md", instance.html());
+    const result = await writeFile("./README.md", instance.xml());
     return result;
   }
   return;
